@@ -1,13 +1,11 @@
+import 'reflect-metadata'
 import express from 'express';
+
+import "./database"
 
 const app = express();
 
-app.get('/test', (request, response) => {
-  return response.send('test get')
-})
+app.use(express.json());
 
-app.post('/test', (request, response) => {
-  return response.send('test post')
-})
 
 app.listen(3333, () => console.log('Server up!'))
