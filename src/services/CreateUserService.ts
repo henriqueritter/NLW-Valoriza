@@ -4,11 +4,12 @@ import { getCustomRepository } from 'typeorm'
 interface IUserRequest {
   name: string;
   email: string;
+  password: string;
   admin?: boolean;
 }
 
 class CreateUserService {
-  async execute({ name, email, admin }: IUserRequest) {
+  async execute({ name, email, password, admin }: IUserRequest) {
     if (!email) {
 
       throw new Error("Email incorrect")
@@ -25,7 +26,7 @@ class CreateUserService {
 
     //criacao de objeto no banco
     const user = usersRepository.create({
-      name, email, admin
+      name, email, password, admin
     });
 
     await usersRepository.save(user);
