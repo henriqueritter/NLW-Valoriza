@@ -4,7 +4,6 @@ import { UsersRepositories } from '../repositories/UsersRepositories';
 
 
 export async function ensureAdmin(request: Request, response: Response, next: NextFunction) {
-
   //recupera id do usuario passado pelo token no middleware anterior
   const { user_id } = request;
 
