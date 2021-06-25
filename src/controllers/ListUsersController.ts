@@ -5,9 +5,9 @@ class ListUsersController {
   async handle(request: Request, response: Response) {
     const listUsersService = new ListUsersService();
 
-    const users = listUsersService.execute();
+    const users = await listUsersService.execute();
 
-    return response.json(users)
+    return response.json(users);
   }
 
 }
