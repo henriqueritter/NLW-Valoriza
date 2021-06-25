@@ -2,6 +2,10 @@ import { Request, Response, NextFunction } from 'express'
 import { verify } from 'jsonwebtoken'
 import { ListUserService } from '../services/ListUserService'
 
+interface IPayload {
+  sub: string;
+}
+
 export function ensureAuthenticated(
   request: Request,
   response: Response,
@@ -19,13 +23,14 @@ export function ensureAuthenticated(
 
   //valida se token é valido
   try {
-    const { sub } = verify(token, '89b823a188ac2ee48413b4930e272d5c');
+    const { sub } = verify(token, '89b823a188ac2ee48413b4930e272d5c') as IPayload;
     //se validou token entao passe para prox rota
 
     //passa o id do usuario que esta no sub do token para as prox rotas
     request.user_id = sub;
 
     return next();
+
   } catch (err) {
     return response.status(401).end();
   }

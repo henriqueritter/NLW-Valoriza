@@ -1,21 +1,17 @@
 import { Request, Response, NextFunction } from 'express'
-import { ListUserService } from '../services/ListUserService'
+import { getCustomRepository } from 'typeorm'
+import { UsersRepositories } from '../repositories/UsersRepositories';
+
 
 export async function ensureAdmin(request: Request, response: Response, next: NextFunction) {
-  /*
-  const admin=true;
-  if(admin){
-    return next()
-  }
-  
-  return response.status(400).json({error:'need admin'})
-  */
 
-  const { email } = request.body;
+  //recupera id do usuario passado pelo token no middleware anterior
+  const { user_id } = request;
 
-  const listUserService = new ListUserService();
 
-  const admin = await listUserService.execute(email)
+  //retorna o campo admin do usuario
+  const usersRepository = getCustomRepository(UsersRepositories);
+  const { admin } = await usersRepository.findOne(user_id);
 
   if (admin) {
     return next()
