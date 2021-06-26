@@ -1,5 +1,5 @@
 # NLW-Valoriza
-Projeto desenvolvido durante a NLW/Together
+O NLW-Valoriza é um projeto desenvolvido durante a sexta edição do NLW.
 
 ## Regras
 - Cadastro de usuário
