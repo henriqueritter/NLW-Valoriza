@@ -9,13 +9,20 @@ describe('Users', () => {
   beforeAll(async () => {
     const connection = await createConnection();
     await connection.runMigrations();
-
   });
 
   afterAll(async () => {
+    await getConnection().close();
+  })
+
+  afterEach(async () => {
     const connection = getConnection();
-    await connection.dropDatabase();
-    await connection.close();
+    const entities = connection.entityMetadatas;
+
+    entities.forEach(async (entity) => {
+      const repository = connection.getRepository(entity.name);
+      await repository.query(`DELETE FROM ${entity.tableName}`);
+    })
   })
 
   it('should be able to create a new user', async () => {
@@ -30,6 +37,13 @@ describe('Users', () => {
   });
 
   it('should not be able to create a new user with same email address', async () => {
+    await request(app).post('/users').send({
+      name: "johnfoo 1",
+      email: "john@foo.com",
+      password: "123456",
+      admin: false
+    });
+
     const response = await request(app).post('/users').send({
       name: "johnfoo 2",
       email: "john@foo.com",
@@ -42,6 +56,13 @@ describe('Users', () => {
   });
 
   it('should be able to login user with email and password', async () => {
+    await request(app).post('/users').send({
+      name: "johnfoo",
+      email: "john@foo.com",
+      password: "123456",
+      admin: false
+    });
+
     const response = await request(app).post('/login').send({
       email: "john@foo.com",
       password: "123456"

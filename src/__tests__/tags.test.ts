@@ -8,13 +8,20 @@ describe('Tags', () => {
   beforeAll(async () => {
     const connection = await createConnection();
     await connection.runMigrations();
-
   });
 
   afterAll(async () => {
+    await getConnection().close();
+  })
+
+  afterEach(async () => {
     const connection = getConnection();
-    await connection.dropDatabase();
-    await connection.close();
+    const entities = connection.entityMetadatas;
+
+    entities.forEach(async (entity) => {
+      const repository = connection.getRepository(entity.name);
+      await repository.query(`DELETE FROM ${entity.tableName}`);
+    })
   })
 
 
@@ -31,9 +38,16 @@ describe('Tags', () => {
       password: "123456"
     });
 
-    const bearerToken = token.body;
+    const bearerToken = "bearer " + token.body;
 
+    const response = await request(app)
+      .post('/tags')
+      .set({ Authorization: bearerToken })
+      .send({
+        email: 'admin@foo.com', name: 'Tag Example'
+      });
 
+    expect(response.status).toBe(201);
   })
 
 })
