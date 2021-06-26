@@ -19,7 +19,6 @@ export function ensureAuthenticated(
   // Trata/pega somente a segunda posicao do array gerado pelo split (remove o Bearer)
   const [, token] = authToken.split(" ")
 
-
   //valida se token é valido
   try {
     const { sub } = verify(token, '89b823a188ac2ee48413b4930e272d5c') as IPayload;
@@ -33,8 +32,4 @@ export function ensureAuthenticated(
   } catch (err) {
     return response.status(401).end();
   }
-
-  //recuperar informações do usuário
-
-
 }
