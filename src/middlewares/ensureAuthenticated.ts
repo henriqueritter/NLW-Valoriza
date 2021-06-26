@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
 import { verify } from 'jsonwebtoken'
-import { ListUserService } from '../services/ListUserService'
 
 interface IPayload {
   sub: string;
