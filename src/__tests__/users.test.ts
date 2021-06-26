@@ -7,8 +7,10 @@ import { getConnection } from 'typeorm';
 
 describe('Users', () => {
   beforeAll(async () => {
-    const connection = await createConnection();
-    await connection.runMigrations();
+    if (getConnection()) {
+      const connection = await createConnection();
+      await connection.runMigrations();
+    }
   });
 
   afterAll(async () => {
